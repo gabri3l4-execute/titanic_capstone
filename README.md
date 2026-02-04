@@ -1,35 +1,42 @@
-# Django + ML Project (Beginner Friendly)
+# Django + ML Project
 
-This repository is the starting point for a **Django web application** that also uses **Python machine‑learning libraries** (NumPy, scikit‑learn).
-It is designed to be **easy to set up**, **reproducible**, and **safe for beginners**.
+This repository contains a **simple, beginner‑friendly Django project** with a clear path toward adding **machine‑learning features later**.
 
-The project uses **Miniconda** to manage Python and dependencies.
+The goal of this README is to help **any teammate** clone the repo and get a working Django server running **without prior context**.
 
 ---
 
-## 🚀 What This Project Is
+## 🎯 Project Purpose
 
-- A Django **5.2 (LTS)** backend
-- Running on **Python 3.14**
-- With a scientific stack (**NumPy**, **scikit‑learn**, **SciPy**, **pandas**)
-- Managed via a **Conda environment** for reliability
+- Provide a **clean Django 5.2 (LTS)** starting point
+- Use **Python 3.14** managed via **Miniconda**
+- Keep the setup simple and reproducible
+- Prepare the ground for adding ML (NumPy / scikit‑learn) later
 
-This setup is suitable for:
+At this stage, the project is **pure Django**. No ML code is required to run it.
 
-- Learning Django
-- Adding basic ML / data‑processing features
-- Growing into a production‑ready backend later ^^
+---
+
+## 🧰 Tech Stack
+
+- **Python:** 3.14
+- **Django:** 5.2 (LTS)
+- **Environment management:** Conda (Miniconda)
+- **ML libraries (installed but optional):** NumPy, SciPy, scikit‑learn, pandas
 
 ---
 
 ## 📦 Prerequisites
 
-Before you start, make sure you have:
+You need the following installed locally:
 
-- **[Git](https://git-scm.com/install/windows)**
-- **[Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install)** (recommended) or Anaconda
+- **Git**
+  [https://git-scm.com/](https://git-scm.com/)
 
-Check installation:
+- **Miniconda** (recommended) or Anaconda
+  [https://www.anaconda.com/docs/getting-started/miniconda/install](https://www.anaconda.com/docs/getting-started/miniconda/install)
+
+Verify installation:
 
 ```bash
 git --version
@@ -38,22 +45,24 @@ conda --version
 
 ---
 
-## 🧱 Project Structure
+## 📁 Project Structure
 
 ```text
 project-root/
-├── backend/              # Django project config (settings.py, urls.py, etc.)
-├── core/                 # Django app
-├── ml/                   # ML-related code (models, inference, utils)
+├── backend/              # Django project (settings, URLs, ASGI/WSGI)
+├── core/                 # Main Django app
+├── ml/                   # ML code (empty / optional for now)
 ├── manage.py
-├── environment.yml
+├── environment.yml       # Conda environment definition
 ├── README.md
 └── .gitignore
 ```
 
+> 💡 You only need `backend/`, `core/`, and `manage.py` to run Django.
+
 ---
 
-## 🐍 Environment Setup (Step‑by‑Step)
+## 🐍 Environment Setup
 
 ### 1️⃣ Create the Conda environment
 
@@ -63,11 +72,11 @@ From the project root:
 conda env create -f environment.yml
 ```
 
-This will:
+This installs:
 
-- Install Python 3.14
-- Install Django 5.2
-- Install NumPy, scikit‑learn, and other dependencies
+- Python 3.14
+- Django 5.2
+- Scientific libraries (for future ML work)
 
 ### 2️⃣ Activate the environment
 
@@ -75,51 +84,35 @@ This will:
 conda activate titanic_capstone_django-ml
 ```
 
-### 3️⃣ Verify installation
+### 3️⃣ Verify
 
 ```bash
 python --version
-# Python 3.14.x
-
 django-admin --version
-# 5.2
 ```
+
+Expected:
+
+- Python 3.14.x
+- Django 5.2
 
 ---
 
-## ▶️ Creating the Django Project
+## ▶️ Running the Django Project
 
-Create the Django project inside your repo:
-
-```bash
-django-admin startproject backend .
-```
-
-This creates the `backend/` folder with `settings.py`, `urls.py`, `wsgi.py`, and `asgi.py`.
-
-### 1️⃣ Create a Django app
-
-```bash
-python manage.py startapp core
-```
-
-Register it in `backend/settings.py`:
-
-```python
-INSTALLED_APPS = [
-    ...
-    'core',
-]
-```
-
-## ▶️ Running the Development Server
+Apply initial migrations:
 
 ```bash
 python manage.py migrate
+```
+
+Start the development server:
+
+```bash
 python manage.py runserver
 ```
 
-Open your browser at:
+Open your browser:
 
 ```
 http://127.0.0.1:8000/
@@ -129,9 +122,11 @@ You should see the Django welcome page.
 
 ---
 
-## 📄 First Django View + URL (No ML yet)
+## 🔌 Example Endpoint (Sanity Check)
 
-Create a simple view in `core/views.py`:
+This project includes a minimal endpoint to confirm everything works.
+
+### View (`core/views.py`)
 
 ```python
 from django.http import HttpResponse
@@ -141,36 +136,36 @@ def ping(request):
     return HttpResponse("pong")
 ```
 
-Add a URL for it in `core/urls.py`:
+### URL configuration (`core/urls.py`)
 
 ```python
 from django.urls import path
 from .views import ping
 
 urlpatterns = [
-    path('ping/', ping),
+    path("ping/", ping),
 ]
 ```
 
-Include the app URLs in `backend/urls.py`:
+### Project URLs (`backend/urls.py`)
 
 ```python
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('core.urls')),
+    path("admin/", admin.site.urls),
+    path("", include("core.urls")),
 ]
 ```
 
-Visit:
+Test it in the browser:
 
 ```
 http://127.0.0.1:8000/ping/
 ```
 
-You should see:
+Expected response:
 
 ```
 pong
@@ -178,11 +173,13 @@ pong
 
 ---
 
-## 📁 Environment Management Rules
+## 📦 Dependency Management Rules
 
-- **Do not** install NumPy / SciPy / scikit‑learn with `pip`
-- Always update dependencies via `environment.yml`
-- If you add a new package:
+- Use **Conda** for all dependencies
+- Do **not** install NumPy / SciPy / scikit‑learn with `pip`
+- Update dependencies only via `environment.yml`
+
+To apply changes:
 
 ```bash
 conda env update -f environment.yml --prune
@@ -190,27 +187,35 @@ conda env update -f environment.yml --prune
 
 ---
 
-## 🧪 Development Tips
+## 🧠 About the `ml/` Folder
 
-- Use virtual environments **only through Conda**
-- Restart the server after dependency changes
-- Commit `environment.yml`, not a raw `conda env export`
+The `ml/` folder is reserved for **future machine‑learning code**.
+
+At this stage:
+
+- It may be empty
+- It is **not required** to run Django
+
+When ML is added later:
+
+- Models will be loaded lazily
+- No ML code will run at Django startup
 
 ---
 
-## ❓ Common Issues
+## 🧪 Common Issues
 
-**Problem:** `ModuleNotFoundError`
+**Django commands fail**
 
 - Make sure the Conda environment is activated
 
-**Problem:** Conda solve takes a long time
+**Long Conda solve times**
 
 - Ensure only `conda-forge` is used
 
 ---
 
-## 📚 Useful Commands Cheat Sheet
+## 📚 Common Commands
 
 ```bash
 conda activate titanic_capstone_django-ml
@@ -221,11 +226,14 @@ python manage.py migrate
 
 ---
 
-## 📌 Next Steps
+## 🗺️ Next Steps
 
-Some ideas for extending this project:
+Planned improvements:
 
-- [TODO]
+- Add Django REST Framework
+- Add tests (pytest)
+- Add ML inference endpoints
+- Add Docker support
 
 ---
 
