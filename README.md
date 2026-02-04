@@ -137,18 +137,18 @@ Create a simple view in `core/views.py`:
 from django.http import HttpResponse
 
 
-def hello_world(request):
-    return HttpResponse("Hello, Django World!")
+def ping(request):
+    return HttpResponse("pong")
 ```
 
 Add a URL for it in `core/urls.py`:
 
 ```python
 from django.urls import path
-from .views import hello_world
+from .views import ping
 
 urlpatterns = [
-    path('hello/', hello_world),
+    path('ping/', ping),
 ]
 ```
 
@@ -167,13 +167,13 @@ urlpatterns = [
 Visit:
 
 ```
-http://127.0.0.1:8000/hello/
+http://127.0.0.1:8000/ping/
 ```
 
 You should see:
 
 ```
-Hello, Django World!
+pong
 ```
 
 ---
