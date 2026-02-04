@@ -38,17 +38,16 @@ conda --version
 
 ---
 
-## 🧱 Project Structure (Not written in stone)
+## 🧱 Project Structure
 
 ```text
 project-root/
-├── environment.yml        # Conda environment definition
-├── README.md              # This file
-├── manage.py              # Django entry point
-├── backend/               # Django project & apps
-│   ├── settings/
-│   ├── apps/
-│   └── ml/                # ML-related code (models, inference, utils)
+├── backend/              # Django project config (settings.py, urls.py, etc.)
+├── core/                 # Django app
+├── ml/                   # ML-related code (models, inference, utils)
+├── manage.py
+├── environment.yml
+├── README.md
 └── .gitignore
 ```
 
@@ -86,17 +85,32 @@ django-admin --version
 # 5.2
 ```
 
-Optional sanity check:
+---
+
+## ▶️ Creating the Django Project
+
+Create the Django project inside your repo:
 
 ```bash
-python - <<EOF
-import numpy, sklearn
-print(numpy.__version__)
-print(sklearn.__version__)
-EOF
+django-admin startproject backend .
 ```
 
----
+This creates the `backend/` folder with `settings.py`, `urls.py`, `wsgi.py`, and `asgi.py`.
+
+### 1️⃣ Create a Django app
+
+```bash
+python manage.py startapp core
+```
+
+Register it in `backend/settings.py`:
+
+```python
+INSTALLED_APPS = [
+    ...
+    'core',
+]
+```
 
 ## ▶️ Running the Development Server
 
@@ -110,6 +124,58 @@ Open your browser at:
 ```
 http://127.0.0.1:8000/
 ```
+
+You should see the Django welcome page.
+
+---
+
+## 📄 First Django View + URL (No ML yet)
+
+Create a simple view in `core/views.py`:
+
+```python
+from django.http import HttpResponse
+
+
+def hello_world(request):
+    return HttpResponse("Hello, Django World!")
+```
+
+Add a URL for it in `core/urls.py`:
+
+```python
+from django.urls import path
+from .views import hello_world
+
+urlpatterns = [
+    path('hello/', hello_world),
+]
+```
+
+Include the app URLs in `backend/urls.py`:
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('core.urls')),
+]
+```
+
+Visit:
+
+```
+http://127.0.0.1:8000/hello/
+```
+
+You should see:
+
+```
+Hello, Django World!
+```
+
 
 ---
 
