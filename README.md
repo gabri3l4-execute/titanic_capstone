@@ -176,7 +176,6 @@ You should see:
 Hello, Django World!
 ```
 
-
 ---
 
 ## 📁 Environment Management Rules
