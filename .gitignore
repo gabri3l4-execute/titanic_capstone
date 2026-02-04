@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.env
+db.sqlite3
+*.log
+.venv/
+.ipynb_checkpoints/
+*.pkl
+*.joblib
+.vscode/
+.idea/
+.DS_Store
