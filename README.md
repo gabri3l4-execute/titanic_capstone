@@ -72,7 +72,7 @@ This will:
 ### 2️⃣ Activate the environment
 
 ```bash
-conda activate django-ml
+conda activate titanic_capstone_django-ml
 ```
 
 ### 3️⃣ Verify installation
@@ -213,7 +213,7 @@ conda env update -f environment.yml --prune
 ## 📚 Useful Commands Cheat Sheet
 
 ```bash
-conda activate django-ml
+conda activate titanic_capstone_django-ml
 python manage.py runserver
 python manage.py makemigrations
 python manage.py migrate
