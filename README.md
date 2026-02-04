@@ -26,8 +26,8 @@ This setup is suitable for:
 
 Before you start, make sure you have:
 
-- **Git**
-- **Miniconda** (recommended) or Anaconda
+- **[Git](https://git-scm.com/install/windows)**
+- **[Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install)** (recommended) or Anaconda
 
 Check installation:
 
