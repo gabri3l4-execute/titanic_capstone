@@ -244,3 +244,5 @@ Choose a license before publishing (MIT is common for learning projects).
 ---
 
 Happy hacking 👋
+
+Please, if you have any suggestions contact me
