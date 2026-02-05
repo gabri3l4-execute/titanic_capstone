@@ -9,7 +9,7 @@ The goal of this README is to help **any teammate** clone the repo and get a wor
 ## 🎯 Project Purpose
 
 - Provide a **clean Django 5.2 (LTS)** starting point
-- Use **Python 3.14** managed via **Miniconda**
+- Use **Python 3.11** managed via **Miniconda**
 - Keep the setup simple and reproducible
 - Prepare the ground for adding ML (NumPy / scikit‑learn) later
 
@@ -19,7 +19,7 @@ At this stage, the project is **pure Django**. No ML code is required to run it.
 
 ## 🧰 Tech Stack
 
-- **Python:** 3.14
+- **Python:** 3.11
 - **Django:** 5.2 (LTS)
 - **Environment management:** Conda (Miniconda)
 - **ML libraries (installed but optional):** NumPy, SciPy, scikit‑learn, pandas
@@ -74,14 +74,14 @@ conda env create -f environment.yml
 
 This installs:
 
-- Python 3.14
+- Python 3.11
 - Django 5.2
 - Scientific libraries (for future ML work)
 
 ### 2️⃣ Activate the environment
 
 ```bash
-conda activate titanic_capstone_django-ml
+conda activate titanic_capstone
 ```
 
 ### 3️⃣ Verify
@@ -93,7 +93,7 @@ django-admin --version
 
 Expected:
 
-- Python 3.14.x
+- Python 3.11.x
 - Django 5.2
 
 ---
@@ -218,28 +218,11 @@ When ML is added later:
 ## 📚 Common Commands
 
 ```bash
-conda activate titanic_capstone_django-ml
+conda activate titanic_capstone
 python manage.py runserver
 python manage.py makemigrations
 python manage.py migrate
 ```
-
----
-
-## 🗺️ Next Steps
-
-Planned improvements:
-
-- Add Django REST Framework
-- Add tests (pytest)
-- Add ML inference endpoints
-- Add Docker support
-
----
-
-## 📝 License
-
-Choose a license before publishing (MIT is common for learning projects).
 
 ---
 
