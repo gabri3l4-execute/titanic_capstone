@@ -1,34 +1,24 @@
 
 name: titanic_capstone_django-ml
 channels:
-  - conda-forge
-# conda-forge has newer packages and better Python 3.14 support.
-# ⚠️ Never mix defaults unless you really know why
+  - defaults
 
 dependencies:
   # --- Core runtime ---
-  - python=3.14 # Exact major/minor for reproducibility
-
-  # --- Web framework ---
-  - django=5.2 # LTS
+  - python=3.11 # Most supported version, perfect for learning
 
   # --- Scientific / ML stack ---
   # ⚠️ Avoid mixing pip + conda for scientific libs
   - numpy=2.4 # ABI-stable with sklearn
   - scipy # Let conda choose compatible version
-  - scikit-learn=1.8 # First solid Py 3.14 support
+  - scikit-learn=1.7
   - pandas # Let conda choose compatible version
+  - matplotlib
 
   # --- Utilities ---
   - pip
-  - ipython
-
-  # --- Optional but recommended ---
-  - python-dotenv       # .env support
-  - psycopg2            # PostgreSQL driver (conda-safe)
 
   # --- Pip-only packages (keep minimal) ---
   # This is the section for pip only rules we should follow religiously.
   - pip:
-      - djangorestframework
-      - gunicorn
+      - django==5.2
