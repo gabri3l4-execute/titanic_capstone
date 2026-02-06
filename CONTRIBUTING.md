@@ -4,6 +4,8 @@
 
 This document defines how the team collaborates, reviews code, and maintains a clean, reproducible project.
 
+---
+
 ## Collaboration principles
 
 - One branch per task to keep work isolated and reviewable
