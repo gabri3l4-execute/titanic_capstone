@@ -118,10 +118,10 @@ python manage.py runserver
 Open your browser:
 
 ```
-http://127.0.0.1:8000/
+http://127.0.0.1:8000/ping
 ```
 
-You should see the Django welcome page.
+You should see the word "pong" in the browser's window.
 
 ---
 
