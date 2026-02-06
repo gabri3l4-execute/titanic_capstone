@@ -1,7 +1,5 @@
 # CONTRIBUTING.md
 
----
-
 This document defines how the team collaborates, reviews code, and maintains a clean, reproducible project.
 
 ---
