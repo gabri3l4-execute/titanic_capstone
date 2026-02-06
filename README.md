@@ -81,7 +81,7 @@ This installs:
 ### 2️⃣ Activate the environment
 
 ```bash
-conda activate titanic_capstone
+conda activate titanic_capstone_ml
 ```
 
 ### 3️⃣ Verify
@@ -214,7 +214,7 @@ When ML is added later:
 ## 📚 Common Commands
 
 ```bash
-conda activate titanic_capstone
+conda activate titanic_capstone_ml
 python manage.py runserver
 python manage.py makemigrations
 python manage.py migrate
