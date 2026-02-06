@@ -129,7 +129,7 @@ You should see the Django welcome page.
 
 This project includes a minimal endpoint to confirm everything works.
 
-### View (`core/views.py`)
+### View (`webapp/views.py`)
 
 ```python
 from django.http import HttpResponse
@@ -139,7 +139,7 @@ def ping(request):
     return HttpResponse("pong")
 ```
 
-### URL configuration (`core/urls.py`)
+### URL configuration (`webapp/urls.py`)
 
 ```python
 from django.urls import path
@@ -158,7 +158,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("core.urls")),
+    path("", include("webapp.urls")),
 ]
 ```
 
