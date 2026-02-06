@@ -193,7 +193,7 @@ The `ml/` folder is reserved for **future machine‑learning code**.
 
 At this stage:
 
-- It may be empty
+- It may be empty or not included
 - It is **not required** to run Django
 
 When ML is added later:
@@ -208,10 +208,6 @@ When ML is added later:
 **Django commands fail**
 
 - Make sure the Conda environment is activated
-
-**Long Conda solve times**
-
-- Ensure only `conda-forge` is used
 
 ---
 

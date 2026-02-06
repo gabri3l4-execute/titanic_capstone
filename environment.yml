@@ -1,5 +1,5 @@
 
-name: titanic_capstone_django-ml
+name: titanic_capstone_ml
 channels:
   - defaults
 
@@ -8,12 +8,13 @@ dependencies:
   - python=3.11 # Most supported version, perfect for learning
 
   # --- Scientific / ML stack ---
-  # ⚠️ Avoid mixing pip + conda for scientific libs
+  # Avoid mixing pip + conda for scientific libs
   - numpy=2.4 # ABI-stable with sklearn
   - scipy # Let conda choose compatible version
   - scikit-learn=1.7
   - pandas # Let conda choose compatible version
   - matplotlib
+
 
   # --- Utilities ---
   - pip
