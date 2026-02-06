@@ -50,15 +50,18 @@ conda --version
 ```text
 project-root/
 ├── backend/              # Django project (settings, URLs, ASGI/WSGI)
-├── core/                 # Main Django app
-├── ml/                   # ML code (empty / optional for now)
-├── manage.py
+├── webapp/               # Django app (views, models, migrations, tests)
+├── data/                 # Dataset directory (empty for now)
+├── ml/                   # ML artifacts and experimentation code (currently empty)
+├── notebooks/            # Exploratory workbooks (01_eda_template.ipynb)
+├── db.sqlite3
 ├── environment.yml       # Conda environment definition
+├── manage.py
 ├── README.md
 └── .gitignore
 ```
 
-> 💡 You only need `backend/`, `core/`, and `manage.py` to run Django.
+> 💡 At a minimum you need `backend/`, `webapp/`, and `manage.py` to run Django.
 
 ---
 
