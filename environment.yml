@@ -14,7 +14,8 @@ dependencies:
   - scikit-learn=1.7
   - pandas # Let conda choose compatible version
   - matplotlib
-
+  - seaborn
+  - ipykernel # This installs the Python kernel so VS Code can run notebooks inside your Conda environment.
 
   # --- Utilities ---
   - pip
