@@ -50,15 +50,18 @@ conda --version
 ```text
 project-root/
 ├── backend/              # Django project (settings, URLs, ASGI/WSGI)
-├── core/                 # Main Django app
-├── ml/                   # ML code (empty / optional for now)
-├── manage.py
+├── webapp/               # Django app (views, models, migrations, tests)
+├── data/                 # Dataset directory (empty for now)
+├── ml/                   # ML artifacts and experimentation code (currently empty)
+├── notebooks/            # Exploratory workbooks (01_eda_template.ipynb)
+├── db.sqlite3
 ├── environment.yml       # Conda environment definition
+├── manage.py
 ├── README.md
 └── .gitignore
 ```
 
-> 💡 You only need `backend/`, `core/`, and `manage.py` to run Django.
+> 💡 At a minimum you need `backend/`, `webapp/`, and `manage.py` to run Django.
 
 ---
 
@@ -81,7 +84,7 @@ This installs:
 ### 2️⃣ Activate the environment
 
 ```bash
-conda activate titanic_capstone
+conda activate titanic_capstone_ml
 ```
 
 ### 3️⃣ Verify
@@ -115,10 +118,10 @@ python manage.py runserver
 Open your browser:
 
 ```
-http://127.0.0.1:8000/
+http://127.0.0.1:8000/ping
 ```
 
-You should see the Django welcome page.
+You should see the word "pong" in the browser's window.
 
 ---
 
@@ -126,7 +129,7 @@ You should see the Django welcome page.
 
 This project includes a minimal endpoint to confirm everything works.
 
-### View (`core/views.py`)
+### View (`webapp/views.py`)
 
 ```python
 from django.http import HttpResponse
@@ -136,7 +139,7 @@ def ping(request):
     return HttpResponse("pong")
 ```
 
-### URL configuration (`core/urls.py`)
+### URL configuration (`webapp/urls.py`)
 
 ```python
 from django.urls import path
@@ -155,7 +158,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("core.urls")),
+    path("", include("webapp.urls")),
 ]
 ```
 
@@ -193,7 +196,7 @@ The `ml/` folder is reserved for **future machine‑learning code**.
 
 At this stage:
 
-- It may be empty
+- It may be empty or not included
 - It is **not required** to run Django
 
 When ML is added later:
@@ -209,16 +212,12 @@ When ML is added later:
 
 - Make sure the Conda environment is activated
 
-**Long Conda solve times**
-
-- Ensure only `conda-forge` is used
-
 ---
 
 ## 📚 Common Commands
 
 ```bash
-conda activate titanic_capstone
+conda activate titanic_capstone_ml
 python manage.py runserver
 python manage.py makemigrations
 python manage.py migrate
