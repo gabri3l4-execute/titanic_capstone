@@ -142,5 +142,36 @@ class Passenger(models.Model):
         verbose_name="Feature Vector",
         help_text="JSON representation of features for ML model"
     )
-     
+    
+    class Meta:
+        verbose_name = "Titanic Passenger"
+        verbose_name_plural = "Titanic Passengers"
+        ordering = ['passenger_id']
+        indexes = [
+            models.Index(fields=['passenger_id']),
+            models.Index(fields=['survived']),
+            models.Index(fields=['pclass', 'survived']),
+            models.Index(fields=['sex', 'survived']),
+            models.Index(fields=['age_group', 'survived']),
+            models.Index(fields=['family_size', 'survived']),
+        ]
+    
+    def __str__(self):
+        status = "Survived" if self.survived else "Perished"
+        return f"Passenger {self.passenger_id}: {self.name} - {status}" 
 
+    def save(self, *args, **kwargs):
+        """
+        Override save to calculate engineered features before saving
+        """
+        # Calculate FamilySize
+        self.family_size = self.sibsp + self.parch + 1
+        
+        # Calculate AgeGroup
+        self.age_group = self.calculate_age_group(self.age)
+        
+        # Prepare features for ML
+        self.features_json = self.prepare_features_for_ml()
+        
+        super().save(*args, **kwargs)
+    
