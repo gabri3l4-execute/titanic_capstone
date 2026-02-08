@@ -122,3 +122,25 @@ class Passenger(models.Model):
         verbose_name="Age Group",
         help_text="Age group calculated from age"
     ) 
+
+
+    # ============ ADDITIONAL FIELDS ============
+    
+    # For tracking data source
+    data_source = models.CharField(
+        max_length=10,
+        choices=[('train', 'Training Data'), ('test', 'Test Data')],
+        default='train',
+        verbose_name="Data Source",
+        help_text="Whether this record is from training or test dataset"
+    )
+    
+    # For ML purposes
+    features_json = models.JSONField(
+        default=dict,
+        blank=True,
+        verbose_name="Feature Vector",
+        help_text="JSON representation of features for ML model"
+    )
+     
+
