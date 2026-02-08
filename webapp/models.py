@@ -214,3 +214,17 @@ class Passenger(models.Model):
             'has_cabin': bool(self.cabin),
         }
 
+    def get_survival_status(self):
+        """Return formatted survival status"""
+        return "Survived" if self.survived else "Perished"
+    
+    def get_class_display_full(self):
+        """Return full class name"""
+        class_names = {
+            1: "First Class",
+            2: "Second Class", 
+            3: "Third Class"
+        }
+        return class_names.get(self.pclass, f"Class {self.pclass}")
+
+
