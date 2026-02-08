@@ -94,5 +94,31 @@ class Passenger(models.Model):
         blank=True,
         verbose_name="Port of Embarkation"
     )
+
+    # ============ ENGINEERED FEATURES (Team's Selection) ============
     
+    # 1. FamilySize = SibSp + Parch + 1
+    family_size = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Family Size",
+        help_text="Calculated as SibSp + Parch + 1"
+    )
     
+    # 2. AgeGroup Categories
+    AGE_GROUP_CHOICES = [
+        ('infant', 'Infant (0-2)'),
+        ('child', 'Child (3-12)'),
+        ('teen', 'Teenager (13-19)'),
+        ('young_adult', 'Young Adult (20-29)'),
+        ('adult', 'Adult (30-59)'),
+        ('senior', 'Senior (60+)'),
+        ('unknown', 'Unknown'),
+    ]
+    age_group = models.CharField(
+        max_length=15,
+        choices=AGE_GROUP_CHOICES,
+        default='unknown',
+        verbose_name="Age Group",
+        help_text="Age group calculated from age"
+    ) 
