@@ -303,3 +303,30 @@ class PredictionRecord(models.Model):
         verbose_name="Cabin Number",
         help_text="Optional: Cabin number"
     )
+
+    # ============ ENGINEERED FEATURES (Same as Passenger Model) ============
+    
+    # 1. FamilySize = SibSp + Parch + 1
+    family_size = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Family Size",
+        help_text="Calculated as SibSp + Parch + 1"
+    )
+    
+    # 2. AgeGroup Categories (same as Passenger model)
+    AGE_GROUP_CHOICES = [
+        ('infant', 'Infant (0-2)'),
+        ('child', 'Child (3-12)'),
+        ('teen', 'Teenager (13-19)'),
+        ('young_adult', 'Young Adult (20-29)'),
+        ('adult', 'Adult (30-59)'),
+        ('senior', 'Senior (60+)'),
+    ]
+    age_group = models.CharField(
+        max_length=15,
+        choices=AGE_GROUP_CHOICES,
+        blank=True,
+        verbose_name="Age Group",
+        help_text="Age group calculated from age"
+    )
