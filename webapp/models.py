@@ -175,3 +175,42 @@ class Passenger(models.Model):
         
         super().save(*args, **kwargs)
     
+    @staticmethod
+    def calculate_age_group(age):
+        """
+        Static method to calculate age group from age
+        """
+        if age is None:
+            return 'unknown'
+        
+        if age <= 2:
+            return 'infant'
+        elif age <= 12:
+            return 'child'
+        elif age <= 19:
+            return 'teen'
+        elif age <= 29:
+            return 'young_adult'
+        elif age <= 59:
+            return 'adult'
+        else:
+            return 'senior'
+
+    def prepare_features_for_ml(self):
+        """
+        Prepare all features in a format suitable for ML model
+        """
+        return {
+            'pclass': self.pclass,
+            'sex': self.sex,
+            'age': self.age,
+            'sibsp': self.sibsp,
+            'parch': self.parch,
+            'family_size': self.family_size,
+            'age_group': self.age_group,
+            'fare': float(self.fare) if self.fare else None,
+            'embarked': self.embarked if self.embarked else None,
+            'cabin_deck': self.cabin[0] if self.cabin and len(self.cabin) > 0 else None,
+            'has_cabin': bool(self.cabin),
+        }
+
