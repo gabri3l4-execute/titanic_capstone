@@ -315,20 +315,11 @@ class PredictionRecord(models.Model):
     )
     
     # 2. AgeGroup Categories (same as Passenger model)
-    AGE_GROUP_CHOICES = [
-        ('infant', 'Infant (0-2)'),
-        ('child', 'Child (3-12)'),
-        ('teen', 'Teenager (13-19)'),
-        ('young_adult', 'Young Adult (20-29)'),
-        ('adult', 'Adult (30-59)'),
-        ('senior', 'Senior (60+)'),
-    ]
     age_group = models.CharField(
         max_length=15,
-        choices=AGE_GROUP_CHOICES,
+        choices=Passenger.AGE_GROUP_CHOICES,
         blank=True,
-        verbose_name="Age Group",
-        help_text="Age group calculated from age"
+        verbose_name="Age Group"
     )
 
     # ============ PREDICTION RESULTS ============
@@ -346,22 +337,6 @@ class PredictionRecord(models.Model):
         verbose_name="Survival Probability",
         help_text="Probability of survival between 0.0 and 1.0"
     )
-
-    # For ML integration
-    ml_model_used = models.CharField(
-        max_length=50,
-        blank=True,
-        verbose_name="ML Model Used",
-        help_text="Name of the ML model that made this prediction"
-    )
-    
-    model_version = models.CharField(
-        max_length=20,
-        blank=True,
-        verbose_name="Model Version",
-        help_text="Version of the ML model"
-    )
-
     
     # ============ SYSTEM METADATA ============
     
@@ -369,37 +344,10 @@ class PredictionRecord(models.Model):
         default=timezone.now,
         verbose_name="Prediction Timestamp"
     )
-    
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name="Last Updated"
-    )
-    
-    # For tracking
-    session_id = models.CharField(
-        max_length=100,
-        blank=True,
-        verbose_name="Session ID"
-    )
-
-    user_agent = models.TextField(
-        blank=True,
-        verbose_name="User Agent",
-        help_text="Browser information from the user"
-    )
-
     class Meta:
         verbose_name = "Prediction Record"
         verbose_name_plural = "Prediction Records"
         ordering = ['-created_at']
-        indexes = [
-            models.Index(fields=['created_at']),
-            models.Index(fields=['survived_prediction']),
-            models.Index(fields=['pclass', 'survived_prediction']),
-            models.Index(fields=['sex', 'survived_prediction']),
-            models.Index(fields=['age_group', 'survived_prediction']),
-            models.Index(fields=['family_size', 'survived_prediction']),
-        ]
     
     def __str__(self):
         if self.survived_prediction is None:
@@ -410,14 +358,23 @@ class PredictionRecord(models.Model):
         return f"Prediction #{self.id}: {self.name} - {status}"
 
     def save(self, *args, **kwargs):
-        """
-        Override save to calculate engineered features before saving
-        """
-        # Calculate FamilySize (SibSp + Parch + 1)
+        """Calculate engineered features before saving"""
         self.family_size = self.sibsp + self.parch + 1
         
-        # Calculate AgeGroup based on age
-        self.age_group = Passenger.calculate_age_group(self.age)
+        if self.age is None:
+            self.age_group = 'unknown'
+        elif self.age <= 2:
+            self.age_group = 'infant'
+        elif self.age <= 12:
+            self.age_group = 'child'
+        elif self.age <= 19:
+            self.age_group = 'teen'
+        elif self.age <= 29:
+            self.age_group = 'young_adult'
+        elif self.age <= 59:
+            self.age_group = 'adult'
+        else:
+            self.age_group = 'senior'
         
         super().save(*args, **kwargs)
 
@@ -458,3 +415,25 @@ class PredictionRecord(models.Model):
             'cabin_deck': self.cabin[0] if self.cabin and len(self.cabin) > 0 else None,
             'has_cabin': bool(self.cabin),
         }
+        
+    def get_feature_summary(self):
+        """
+        Return a summary of key features for display
+        """
+        summary = [
+            f"Name: {self.name}",
+            f"Class: {self.get_pclass_display()}",
+            f"Gender: {self.get_sex_display()}",
+            f"Age: {self.age:.1f} years",
+            f"Age Group: {self.get_age_group_display()}",
+            f"Family Size: {self.family_size}",
+            f"Embarked: {self.get_embarked_display()}",
+        ]
+
+        if self.sibsp > 0:
+            summary.append(f"Siblings/Spouses: {self.sibsp}")
+        if self.parch > 0:
+            summary.append(f"Parents/Children: {self.parch}")
+        
+        return summary
+
