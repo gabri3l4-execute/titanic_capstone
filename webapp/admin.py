@@ -189,3 +189,39 @@ class PredictionRecordAdmin(admin.ModelAdmin):
     )
     
     ordering = ('-created_at',)
+
+
+    # Custom display methods
+    def name_display(self, obj):
+        return obj.name[:25] + '...' if len(obj.name) > 25 else obj.name
+    name_display.short_description = 'Name'
+    
+    def class_gender_display(self, obj):
+        return f"{obj.get_pclass_display()[:1]}, {obj.get_sex_display()[:1]}"
+    class_gender_display.short_description = 'Class/Gender'
+    
+    def age_family_display(self, obj):
+        return f"Age: {obj.age:.0f}, Family: {obj.family_size}"
+    age_family_display.short_description = 'Age/Family'
+    
+    
+    def prediction_result_display(self, obj):
+        if obj.survived_prediction is None:
+            return format_html('<span class="badge bg-secondary">Pending</span>')
+        
+        if obj.survived_prediction:
+            prob = obj.get_probability_percentage()
+            return format_html(
+                '<span class="badge bg-success">Survived ({})</span>',
+                prob
+            )
+            
+        else:
+            prob = obj.get_probability_percentage()
+            return format_html(
+                '<span class="badge bg-danger">Not Survived ({})</span>',
+                prob
+            )
+    prediction_result_display.short_description = 'Prediction'
+    
+    
