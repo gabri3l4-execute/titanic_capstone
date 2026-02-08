@@ -346,3 +346,45 @@ class PredictionRecord(models.Model):
         verbose_name="Survival Probability",
         help_text="Probability of survival between 0.0 and 1.0"
     )
+
+    # For ML integration
+    ml_model_used = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name="ML Model Used",
+        help_text="Name of the ML model that made this prediction"
+    )
+    
+    model_version = models.CharField(
+        max_length=20,
+        blank=True,
+        verbose_name="Model Version",
+        help_text="Version of the ML model"
+    )
+
+    
+    # ============ SYSTEM METADATA ============
+    
+    created_at = models.DateTimeField(
+        default=timezone.now,
+        verbose_name="Prediction Timestamp"
+    )
+    
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Last Updated"
+    )
+    
+    # For tracking
+    session_id = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Session ID"
+    )
+
+    user_agent = models.TextField(
+        blank=True,
+        verbose_name="User Agent",
+        help_text="Browser information from the user"
+    )
+    
