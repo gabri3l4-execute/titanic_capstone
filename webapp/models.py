@@ -228,3 +228,47 @@ class Passenger(models.Model):
         return class_names.get(self.pclass, f"Class {self.pclass}")
 
 
+
+class PredictionRecord(models.Model):
+    """
+    Model for storing user predictions from the web form
+    Includes the same engineered features as Passenger model
+    """
+
+    # ============ USER INPUT FIELDS (From Prediction Form) ============
+    
+    # Required fields (as per team decision)
+    name = models.CharField(
+        max_length=200,
+        verbose_name="Passenger Name",
+        help_text="Full name for prediction"
+    )
+    
+    sex = models.CharField(
+        max_length=10,
+        choices=[('male', 'Male'), ('female', 'Female')],
+        verbose_name="Gender"
+    )
+    
+    age = models.FloatField(
+        validators=[MinValueValidator(0), MaxValueValidator(120)],
+        verbose_name="Age",
+        help_text="Age in years"
+    )
+    
+    parch = models.IntegerField(
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
+        verbose_name="Parents/Children Aboard",
+        help_text="Number of parents or children traveling with"
+    )
+    
+    embarked = models.CharField(
+        max_length=1,
+        choices=[
+            ('C', 'Cherbourg'),
+            ('Q', 'Queenstown'), 
+            ('S', 'Southampton')
+        ],
+        verbose_name="Port of Embarkation"
+    )
