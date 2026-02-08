@@ -387,4 +387,74 @@ class PredictionRecord(models.Model):
         verbose_name="User Agent",
         help_text="Browser information from the user"
     )
+
+    class Meta:
+        verbose_name = "Prediction Record"
+        verbose_name_plural = "Prediction Records"
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['created_at']),
+            models.Index(fields=['survived_prediction']),
+            models.Index(fields=['pclass', 'survived_prediction']),
+            models.Index(fields=['sex', 'survived_prediction']),
+            models.Index(fields=['age_group', 'survived_prediction']),
+            models.Index(fields=['family_size', 'survived_prediction']),
+        ]
     
+    def __str__(self):
+        if self.survived_prediction is None:
+            status = "Pending"
+        else:
+            status = "Survived" if self.survived_prediction else "Not Survived"
+        
+        return f"Prediction #{self.id}: {self.name} - {status}"
+
+    def save(self, *args, **kwargs):
+        """
+        Override save to calculate engineered features before saving
+        """
+        # Calculate FamilySize (SibSp + Parch + 1)
+        self.family_size = self.sibsp + self.parch + 1
+        
+        # Calculate AgeGroup based on age
+        self.age_group = Passenger.calculate_age_group(self.age)
+        
+        super().save(*args, **kwargs)
+
+    def get_probability_percentage(self):
+        """
+        Return probability as formatted percentage string
+        """
+        if self.probability is None:
+            return "Pending"
+        return f"{self.probability * 100:.1f}%"
+    
+    def get_prediction_display(self):
+        """
+        Return formatted prediction result
+        """
+        if self.survived_prediction is None:
+            return "Prediction pending"
+        
+        result = "Survived" if self.survived_prediction else "Did Not Survive"
+        probability = self.get_probability_percentage()
+        
+        return f"{result} ({probability})"
+    
+    def prepare_for_ml_prediction(self):
+        """
+        Prepare data in the same format as Passenger model for ML prediction
+        """
+        return {
+            'pclass': self.pclass,
+            'sex': self.sex,
+            'age': self.age,
+            'sibsp': self.sibsp,
+            'parch': self.parch,
+            'family_size': self.family_size,
+            'age_group': self.age_group,
+            'fare': float(self.fare) if self.fare else None,
+            'embarked': self.embarked if self.embarked else None,
+            'cabin_deck': self.cabin[0] if self.cabin and len(self.cabin) > 0 else None,
+            'has_cabin': bool(self.cabin),
+        }
