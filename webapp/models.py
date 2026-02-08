@@ -330,3 +330,19 @@ class PredictionRecord(models.Model):
         verbose_name="Age Group",
         help_text="Age group calculated from age"
     )
+
+    # ============ PREDICTION RESULTS ============
+    
+    survived_prediction = models.BooleanField(
+        null=True,
+        blank=True,
+        verbose_name="Survival Prediction"
+    )
+    
+    probability = models.FloatField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0.0), MaxValueValidator(1.0)],
+        verbose_name="Survival Probability",
+        help_text="Probability of survival between 0.0 and 1.0"
+    )
