@@ -11,10 +11,12 @@ class PassengerAdmin(admin.ModelAdmin):
     list_display = (
         'passenger_id',
         'name_display',
-        'class_gender_display',
-        'age_family_display',
-        'survival_status_display',
-        'data_source',
+        'pclass',
+        'sex',
+        'age_display',
+        'survival_status',
+        'family_size',
+        'age_group',
     )
     
     list_filter = (
@@ -23,7 +25,6 @@ class PassengerAdmin(admin.ModelAdmin):
         'sex',
         'age_group',
         'embarked',
-        'data_source',
     )
     
     search_fields = (
@@ -32,82 +33,22 @@ class PassengerAdmin(admin.ModelAdmin):
         'cabin',
     )
     
-    readonly_fields = (
-        'family_size',
-        'age_group',
-        'features_json',
-    )
-    
-    fieldsets = (
-        ('Passenger Information', {
-            'fields': (
-                'passenger_id',
-                'survived',
-                ('pclass', 'data_source'),
-                'name',
-                ('sex', 'age'),
-                ('sibsp', 'parch'),
-            )
-        }),
-        
-        ('Travel Details', {
-            'fields': (
-                'ticket',
-                'fare',
-                'cabin',
-                'embarked',
-            )
-        }),
-
-        ('Engineered Features', {
-            'fields': (
-                ('family_size', 'age_group'),
-                'features_json',
-            )
-        }),
-    )
-    
-    ordering = ('passenger_id',)
-    
-    
     # Custom display methods
     def name_display(self, obj):
         return obj.name[:30] + '...' if len(obj.name) > 30 else obj.name
     name_display.short_description = 'Name'
     
-    def class_gender_display(self, obj):
-        return f"{obj.get_pclass_display()[:1]}, {obj.get_sex_display()[:1]}"
-    class_gender_display.short_description = 'Class/Gender'
+    def age_display(self, obj):
+        return f"{obj.age:.1f}" if obj.age else "N/A"
+    age_display.short_description = 'Age'
     
-    def age_family_display(self, obj):
-        age_str = f"{obj.age:.0f}" if obj.age else "?"
-        return f"Age: {age_str}, Family: {obj.family_size}"
-    age_family_display.short_description = 'Age/Family'
-    
-    def survival_status_display(self, obj):
+    def survival_status(self, obj):
         if obj.survived:
             return format_html('<span class="badge bg-success">Survived</span>')
         else:
             return format_html('<span class="badge bg-danger">Perished</span>')
-    survival_status_display.short_description = 'Survival'
+    survival_status.short_description = 'Status'
     
-    
-    # Admin actions
-    actions = ['recalculate_features']
-    
-    def recalculate_features(self, request, queryset):
-        """Recalculate engineered features for selected passengers"""
-        updated = 0
-        for passenger in queryset:
-            passenger.save()  # This triggers feature calculation
-            updated += 1
-        
-        self.message_user(
-            request,
-            f"Successfully recalculated features for {updated} passengers."
-        )
-    recalculate_features.short_description = "Recalculate engineered features"
-
 
 @admin.register(PredictionRecord)
 class PredictionRecordAdmin(admin.ModelAdmin):
@@ -116,15 +57,17 @@ class PredictionRecordAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name_display',
-        'class_gender_display',
-        'age_family_display',
-        'prediction_result_display',
+        'sex',
+        'age_display',
+        'embarked',
+        'family_size',
+        'age_group',
+        'prediction_status',
         'created_at_display',
     )
     
     list_filter = (
         'survived_prediction',
-        'pclass',
         'sex',
         'age_group',
         'embarked',
@@ -139,27 +82,23 @@ class PredictionRecordAdmin(admin.ModelAdmin):
     
     readonly_fields = (
         'created_at',
-        'updated_at',
         'family_size',
         'age_group',
-        'session_id',
-        'user_agent',
     )
     
     fieldsets = (
         ('Passenger Information (Required)', {
             'fields': (
                 'name',
-                ('pclass', 'sex'),
-                ('age', 'embarked'),
-                ('sibsp', 'parch'),
+                ('sex', 'age'),
+                ('parch', 'embarked'),
             )
         }),
         
         ('Additional Information (Optional)', {
             'fields': (
-                'ticket',
-                'fare',
+                'sibsp',
+                ('ticket', 'fare'),
                 'cabin',
             ),
             'classes': ('collapse',),
@@ -175,37 +114,22 @@ class PredictionRecordAdmin(admin.ModelAdmin):
         ('Prediction Results', {
             'fields': (
                 ('survived_prediction', 'probability'),
-                ('ml_model_used', 'model_version'),
+                'created_at',
             )
-        }),
-        
-        ('System Information', {
-            'fields': (
-                ('created_at', 'updated_at'),
-                ('session_id', 'user_agent'),
-            ),
-            'classes': ('collapse',),
         }),
     )
     
-    ordering = ('-created_at',)
-
 
     # Custom display methods
     def name_display(self, obj):
         return obj.name[:25] + '...' if len(obj.name) > 25 else obj.name
     name_display.short_description = 'Name'
     
-    def class_gender_display(self, obj):
-        return f"{obj.get_pclass_display()[:1]}, {obj.get_sex_display()[:1]}"
-    class_gender_display.short_description = 'Class/Gender'
+    def age_display(self, obj):
+        return f"{obj.age:.1f}"
+    age_display.short_description = 'Age'
     
-    def age_family_display(self, obj):
-        return f"Age: {obj.age:.0f}, Family: {obj.family_size}"
-    age_family_display.short_description = 'Age/Family'
-    
-    
-    def prediction_result_display(self, obj):
+    def prediction_status(self, obj):
         if obj.survived_prediction is None:
             return format_html('<span class="badge bg-secondary">Pending</span>')
         
@@ -215,32 +139,16 @@ class PredictionRecordAdmin(admin.ModelAdmin):
                 '<span class="badge bg-success">Survived ({})</span>',
                 prob
             )
-            
         else:
             prob = obj.get_probability_percentage()
             return format_html(
                 '<span class="badge bg-danger">Not Survived ({})</span>',
                 prob
             )
-    prediction_result_display.short_description = 'Prediction'
+    prediction_status.short_description = 'Prediction'
     
     
     def created_at_display(self, obj):
         return obj.created_at.strftime("%Y-%m-%d %H:%M")
     created_at_display.short_description = 'Created'
     
-    # Admin actions
-    actions = ['recalculate_prediction_features']
-    
-    def recalculate_prediction_features(self, request, queryset):
-        """Recalculate engineered features for selected predictions"""
-        updated = 0
-        for prediction in queryset:
-            prediction.save()  # This triggers feature calculation
-            updated += 1
-        
-        self.message_user(
-            request,
-            f"Successfully recalculated features for {updated} predictions."
-        )
-    recalculate_prediction_features.short_description = "Recalculate engineered features"
