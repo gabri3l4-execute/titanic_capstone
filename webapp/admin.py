@@ -225,3 +225,22 @@ class PredictionRecordAdmin(admin.ModelAdmin):
     prediction_result_display.short_description = 'Prediction'
     
     
+    def created_at_display(self, obj):
+        return obj.created_at.strftime("%Y-%m-%d %H:%M")
+    created_at_display.short_description = 'Created'
+    
+    # Admin actions
+    actions = ['recalculate_prediction_features']
+    
+    def recalculate_prediction_features(self, request, queryset):
+        """Recalculate engineered features for selected predictions"""
+        updated = 0
+        for prediction in queryset:
+            prediction.save()  # This triggers feature calculation
+            updated += 1
+        
+        self.message_user(
+            request,
+            f"Successfully recalculated features for {updated} predictions."
+        )
+    recalculate_prediction_features.short_description = "Recalculate engineered features"
