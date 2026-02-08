@@ -272,3 +272,34 @@ class PredictionRecord(models.Model):
         ],
         verbose_name="Port of Embarkation"
     )
+
+    # Optional fields (as per team decision)
+    sibsp = models.IntegerField(
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
+        verbose_name="Siblings/Spouses Aboard",
+        help_text="Optional: Number of siblings or spouses traveling with"
+    )
+
+    ticket = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name="Ticket Number",
+        help_text="Optional: Ticket number"
+    )
+    
+    fare = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name="Fare",
+        help_text="Optional: Ticket fare in pounds"
+    )
+
+    cabin = models.CharField(
+        max_length=20,
+        blank=True,
+        verbose_name="Cabin Number",
+        help_text="Optional: Cabin number"
+    )
