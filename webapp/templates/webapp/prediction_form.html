@@ -1,0 +1,139 @@
+{% extends "webapp/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-user-plus me-2"></i>Predict Titanic Survival
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        <h5 class="mb-3 border-bottom pb-2">Required Information</h5>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Passenger Name</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                <div class="text-danger">{{ form.name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Gender</label>
+                                {{ form.sex }}
+                                {% if form.sex.errors %}
+                                <div class="text-danger">{{ form.sex.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Age</label>
+                                {{ form.age }}
+                                <small class="form-text text-muted">{{ form.age.help_text }}</small>
+                                {% if form.age.errors %}     
+                                <div class="text-danger">{{ form.age.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Parents/Children Aboard</label>
+                                {{ form.parch }}
+                                <small class="form-text text-muted">{{ form.parch.help_text }}</small>
+                                {% if form.parch.errors %}
+                                <div class="text-danger">{{ form.parch.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <label class="form-label">Port of Embarkation</label>
+                                {{ form.embarked }}
+                                {% if form.embarked.errors %}
+                                <div class="text-danger">{{ form.embarked.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <h5 class="mb-3 border-bottom pb-2">Optional Information</h5>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Siblings/Spouses Aboard (Optional)</label>
+                                {{ form.sibsp }}
+                                <small class="form-text text-muted">{{ form.sibsp.help_text }}</small>
+                                {% if form.sibsp.errors %}   
+                                <div class="text-danger">{{ form.sibsp.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Ticket Number (Optional)</label>
+                                {{ form.ticket }}
+                                {% if form.ticket.errors %}
+                                <div class="text-danger">{{ form.ticket.errors }}</div>
+                                {% endif %} 
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Fare (Optional)</label>
+                                {{ form.fare }}
+                                {% if form.fare.errors %}
+                                <div class="text-danger">{{ form.fare.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Cabin (Optional)</label>
+                                {{ form.cabin }}
+                                {% if form.cabin.errors %}    
+                                <div class="text-danger">{{ form.cabin.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-info-circle me-2"></i>Engineered Features</h6>
+                            <p class="mb-0">
+                                <strong>Family Size:</strong> Will be calculated as (SibSp + Parch + 1)<br>
+                                <strong>Age Group:</strong> Will be automatically categorized based on age
+                            </p>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-calculator me-2"></i>Predict Survival
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+}
+.form-control:focus, .form-select:focus {
+    border-color: #1a237e;
+    box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.25);
+}
+</style>
+{% endblock %}
