@@ -123,7 +123,7 @@ class Passenger(models.Model):
     ) 
 
 
-    # ============ ADDITIONAL FIELDS ============
+    # ============ METADATA  ============
     
     # For tracking data source
     data_source = models.CharField(
@@ -133,32 +133,16 @@ class Passenger(models.Model):
         verbose_name="Data Source",
         help_text="Whether this record is from training or test dataset"
     )
-    
-    # For ML purposes
-    features_json = models.JSONField(
-        default=dict,
-        blank=True,
-        verbose_name="Feature Vector",
-        help_text="JSON representation of features for ML model"
-    )
+    imported_at = models.DateTimeField(default=timezone.now, verbose_name="Imported At")
     
     class Meta:
         verbose_name = "Titanic Passenger"
         verbose_name_plural = "Titanic Passengers"
         ordering = ['passenger_id']
-        indexes = [
-            models.Index(fields=['passenger_id']),
-            models.Index(fields=['survived']),
-            models.Index(fields=['pclass', 'survived']),
-            models.Index(fields=['sex', 'survived']),
-            models.Index(fields=['age_group', 'survived']),
-            models.Index(fields=['family_size', 'survived']),
-        ]
     
     def __str__(self):
-        status = "Survived" if self.survived else "Perished"
-        return f"Passenger {self.passenger_id}: {self.name} - {status}" 
-
+        return f"Passenger {self.passenger_id}: {self.name}"
+    
     def save(self, *args, **kwargs):
         """
         Override save to calculate engineered features before saving
@@ -166,65 +150,23 @@ class Passenger(models.Model):
         # Calculate FamilySize
         self.family_size = self.sibsp + self.parch + 1
         
-        # Calculate AgeGroup
-        self.age_group = self.calculate_age_group(self.age)
-        
-        # Prepare features for ML
-        self.features_json = self.prepare_features_for_ml()
+        # Calculate age group
+        if self.age is None:
+            self.age_group = 'unknown'
+        elif self.age <= 2:
+            self.age_group = 'infant'
+        elif self.age <= 12:
+            self.age_group = 'child'
+        elif self.age <= 19:
+            self.age_group = 'teen'
+        elif self.age <= 29:
+            self.age_group = 'young_adult'
+        elif self.age <= 59:
+            self.age_group = 'adult'
+        else:
+            self.age_group = 'senior'
         
         super().save(*args, **kwargs)
-    
-    @staticmethod
-    def calculate_age_group(age):
-        """
-        Static method to calculate age group from age
-        """
-        if age is None:
-            return 'unknown'
-        
-        if age <= 2:
-            return 'infant'
-        elif age <= 12:
-            return 'child'
-        elif age <= 19:
-            return 'teen'
-        elif age <= 29:
-            return 'young_adult'
-        elif age <= 59:
-            return 'adult'
-        else:
-            return 'senior'
-
-    def prepare_features_for_ml(self):
-        """
-        Prepare all features in a format suitable for ML model
-        """
-        return {
-            'pclass': self.pclass,
-            'sex': self.sex,
-            'age': self.age,
-            'sibsp': self.sibsp,
-            'parch': self.parch,
-            'family_size': self.family_size,
-            'age_group': self.age_group,
-            'fare': float(self.fare) if self.fare else None,
-            'embarked': self.embarked if self.embarked else None,
-            'cabin_deck': self.cabin[0] if self.cabin and len(self.cabin) > 0 else None,
-            'has_cabin': bool(self.cabin),
-        }
-
-    def get_survival_status(self):
-        """Return formatted survival status"""
-        return "Survived" if self.survived else "Perished"
-    
-    def get_class_display_full(self):
-        """Return full class name"""
-        class_names = {
-            1: "First Class",
-            2: "Second Class", 
-            3: "Third Class"
-        }
-        return class_names.get(self.pclass, f"Class {self.pclass}")
 
 
 
@@ -360,9 +302,8 @@ class PredictionRecord(models.Model):
         """Calculate engineered features before saving"""
         self.family_size = self.sibsp + self.parch + 1
         
-        if self.age is None:
-            self.age_group = 'unknown'
-        elif self.age <= 2:
+        # Calculate age group
+        if self.age <= 2:
             self.age_group = 'infant'
         elif self.age <= 12:
             self.age_group = 'child'
@@ -376,63 +317,3 @@ class PredictionRecord(models.Model):
             self.age_group = 'senior'
         
         super().save(*args, **kwargs)
-
-    def get_probability_percentage(self):
-        """
-        Return probability as formatted percentage string
-        """
-        if self.probability is None:
-            return "Pending"
-        return f"{self.probability * 100:.1f}%"
-    
-    def get_prediction_display(self):
-        """
-        Return formatted prediction result
-        """
-        if self.survived_prediction is None:
-            return "Prediction pending"
-        
-        result = "Survived" if self.survived_prediction else "Did Not Survive"
-        probability = self.get_probability_percentage()
-        
-        return f"{result} ({probability})"
-    
-    def prepare_for_ml_prediction(self):
-        """
-        Prepare data in the same format as Passenger model for ML prediction
-        """
-        return {
-            'pclass': self.pclass,
-            'sex': self.sex,
-            'age': self.age,
-            'sibsp': self.sibsp,
-            'parch': self.parch,
-            'family_size': self.family_size,
-            'age_group': self.age_group,
-            'fare': float(self.fare) if self.fare else None,
-            'embarked': self.embarked if self.embarked else None,
-            'cabin_deck': self.cabin[0] if self.cabin and len(self.cabin) > 0 else None,
-            'has_cabin': bool(self.cabin),
-        }
-        
-    def get_feature_summary(self):
-        """
-        Return a summary of key features for display
-        """
-        summary = [
-            f"Name: {self.name}",
-            f"Class: {self.get_pclass_display()}",
-            f"Gender: {self.get_sex_display()}",
-            f"Age: {self.age:.1f} years",
-            f"Age Group: {self.get_age_group_display()}",
-            f"Family Size: {self.family_size}",
-            f"Embarked: {self.get_embarked_display()}",
-        ]
-
-        if self.sibsp > 0:
-            summary.append(f"Siblings/Spouses: {self.sibsp}")
-        if self.parch > 0:
-            summary.append(f"Parents/Children: {self.parch}")
-        
-        return summary
-
