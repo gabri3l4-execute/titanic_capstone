@@ -1,9 +1,10 @@
-# Titanic++ Survival Prediction System -SR
+## Titanic++ Survival Prediction System -SR
 
-## Project Overview
+# Project Overview
 - Brief description: A machine learning system that predicts Titanic passenger survival
 - Purpose: Capstone project integrating ML, web development, and DevOps
 - Key technologies: Python, Django, Scikit-learn, PostgreSQL/SQLite
+
 
 # Django + ML Project
 
@@ -72,6 +73,16 @@ project-root/
 
 ---
 
+## Steps
+
+### Clone repository
+
+you need to have same structure as main(copy url from github main):
+
+```bash
+git clone [repository-url]
+```
+
 ## 🐍 Environment Setup
 
 ### 1️⃣ Create the Conda environment
@@ -116,6 +127,10 @@ Apply initial migrations:
 python manage.py migrate
 ```
 
+Load ML model:
+[instructions]
+
+
 Start the development server:
 
 ```bash
@@ -125,10 +140,27 @@ python manage.py runserver
 Open your browser:
 
 ```
-http://127.0.0.1:8000/ping
+http://127.0.0.1:8000/
 ```
 
-You should see the word "pong" in the browser's window.
+You should see the project page in the browser's window.
+
+
+---
+
+## Machine Learning Model
+
+- Model type: [e.g., Random Forest Classifier?]
+- Features used: [
+  list key features: 
+  Name,Sex, Age, Parch (parent or children), Embarked
+  optional:Ticket, Fare, Cabin, SibSp 
+  ]
+- Accuracy: [performance metrics?]
+- Training process: [brief description?]
+
+
+
 
 ---
 
