@@ -163,7 +163,7 @@ You should see the project page in the browser's window.
 ---
 
 ## System Architecture
-[Refer to architecture diagram in docs/architecture.png]
+[Refer to architecture diagram in docs/png?]
 
 
 ---
