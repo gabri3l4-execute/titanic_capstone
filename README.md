@@ -1,3 +1,10 @@
+# Titanic++ Survival Prediction System -SR
+
+## Project Overview
+- Brief description: A machine learning system that predicts Titanic passenger survival
+- Purpose: Capstone project integrating ML, web development, and DevOps
+- Key technologies: Python, Django, Scikit-learn, PostgreSQL/SQLite
+
 # Django + ML Project
 
 This repository contains a **simple, beginner‑friendly Django project** with a clear path toward adding **machine‑learning features later**.
@@ -7,6 +14,7 @@ The goal of this README is to help **any teammate** clone the repo and get a wor
 ---
 
 ## 🎯 Project Purpose
+
 - Provide a **clean Django 5.2 (LTS)** starting point
 - Use **Python 3.11** managed via **Miniconda**
 - Keep the setup simple and reproducible
