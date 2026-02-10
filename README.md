@@ -160,6 +160,31 @@ You should see the project page in the browser's window.
 - Training process: [brief description?]
 
 
+---
+
+## System Architecture
+[Refer to architecture diagram in docs/architecture.png]
+
+
+---
+## Team Members & Responsible Tasks
+- [Bharathi]:
+Feature Engineering & EDA with Visualizations
+Advanced Evaluation & Result Page & History Page
+- [Gabriela]:
+GitHub Setup & Documentation & Django Project Setup
+Model Training & Database Persistence & History Page
+- [Saranya]:
+Data Inspection & Analysis & Missing Data Handling
+Testing Framework & Homepage & Model Integration
+- [Siying]:
+Database Model Design & Prediction form
+Documentation & Error Handling & User Experience
+
+
+## License
+[?]
+
 
 
 ---
