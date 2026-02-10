@@ -58,3 +58,56 @@ All endpoints return standard HTTP status codes:
 - 200: Success
 - 400: Bad Request (invalid input)
 - 500: Server Error
+
+
+
+
+## 🔌 Example Endpoint (Sanity Check)
+
+This project includes a minimal endpoint to confirm everything works.
+
+### View (`webapp/views.py`)
+
+```python
+from django.http import HttpResponse
+
+
+def ping(request):
+    return HttpResponse("pong")
+```
+
+### URL configuration (`webapp/urls.py`)
+
+```python
+from django.urls import path
+from .views import ping
+
+urlpatterns = [
+    path("ping/", ping),
+]
+```
+
+### Project URLs (`backend/urls.py`)
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("", include("webapp.urls")),
+]
+```
+
+Test it in the browser:
+
+
+```
+http://127.0.0.1:8000/ping/
+```
+
+Expected response:
+
+```
+pong
+```
