@@ -7,7 +7,6 @@ The goal of this README is to help **any teammate** clone the repo and get a wor
 ---
 
 ## 🎯 Project Purpose
-
 - Provide a **clean Django 5.2 (LTS)** starting point
 - Use **Python 3.11** managed via **Miniconda**
 - Keep the setup simple and reproducible
