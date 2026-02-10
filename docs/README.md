@@ -128,7 +128,7 @@ python manage.py migrate
 ```
 
 Load ML model:
-[instructions]
+[instructions?]
 
 
 Start the development server:
