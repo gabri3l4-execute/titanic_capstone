@@ -40,18 +40,6 @@ This document defines how the team collaborates, reviews code, and maintains a c
 
 ---
 
-## Pull request workflow
-
-- PR title describes the change clearly
-- PR links to the corresponding task
-- PR includes a short summary of what changed and why
-- Code must run without errors before requesting review
-- At least one teammate reviews and approves before merging
-- No self‑merging unless explicitly agreed by the team
-- Branch is deleted after merge
-
----
-
 ## Code style and structure
 
 - Follow the project folder layout:

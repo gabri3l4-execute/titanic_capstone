@@ -183,7 +183,7 @@ Documentation & Error Handling & User Experience
 
 
 ## License
-[?]
+[MIT]
 
 ---
 
