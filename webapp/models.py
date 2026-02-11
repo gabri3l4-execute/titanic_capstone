@@ -44,7 +44,7 @@ class Passenger(models.Model):
     )
     
     # FIXED: Changed from FloatField to IntegerField
-    age = models.FloatField(
+    age = models.IntegerField(
         null=True,
         blank=True,
         verbose_name="Age",
@@ -192,7 +192,8 @@ class PredictionRecord(models.Model):
         verbose_name="Gender"
     )
     
-    age = models.FloatField(
+    #change from FloatField to IntegerFiled
+    age = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(120)],
         verbose_name="Age",
         help_text="Age in years"
