@@ -1,0 +1,55 @@
+{% extends "webapp/base.html" %}
+{% load static %}  
+{% block content %}
+<div class="container py-5">
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold">Titanic Survival Predictor</h1>
+            <p class="lead text-muted">Using Machine Learning to predict the fate of passengers based on historical data from the 1912 disaster.</p>
+            <a href="{% url 'prediction_form' %}" class="btn btn-primary btn-lg px-4">Try Predictor</a>
+        </div>
+        <div class="col-lg-6">
+            <img src="{% static 'webapp/images/titanic-top.jpg' %}" class="img-fluid rounded shadow" alt="Titanic Ship">
+        </div>
+    </div>
+
+    <hr class="my-5">
+
+    <div class="row text-center mb-4">
+        <div class="col">
+            <h2>How the Application Works</h2>
+            <p class="text-muted">A look behind the scenes of our prediction pipeline.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3 text-primary"><i class="fas fa-database fa-2x"></i></div>
+                    <h5 class="card-title">1. Data Input</h5>
+                    <p class="card-text text-muted">You provide passenger details such as Name, Age, Sex, Ticket, Siblings, Parents and Port details through our secure form.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3 text-primary"><i class="fas fa-microchip fa-2x"></i></div>
+                    <h5 class="card-title">2. ML Processing</h5>
+                    <p class="card-text text-muted">Our Random Forest model analyzes the input against patterns found in the 891 historical records from the original dataset.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3 text-primary"><i class="fas fa-chart-line fa-2x"></i></div>
+                    <h5 class="card-title">3. Instant Results</h5>
+                    <p class="card-text text-muted">The app generates a survival probability score and logs the result in your personal prediction history.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

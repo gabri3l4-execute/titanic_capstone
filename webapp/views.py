@@ -1,9 +1,12 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, FormView, ListView
 from django.urls import reverse_lazy
 from .models import Passenger, PredictionRecord
 from .forms import PredictionForm
 
+def home(request):
+    return render(request, 'webapp/home.html',{'title':'home'})
 class PredictionFormView(FormView):
     """
     View for the prediction form with SibSp dropdown
@@ -23,3 +26,5 @@ class PredictionFormView(FormView):
         
         prediction.save()
         return super().form_valid(form)
+    
+    
