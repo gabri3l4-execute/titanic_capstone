@@ -72,6 +72,10 @@ class PredictionForm(forms.ModelForm):
             raise forms.ValidationError("Age must be between 0 and 120 years")
         return age
     
+    def clean_sibsp(self):
+        value = self.cleaned_data['sibsp']
+        return int(value)   # convert string to int
+
     def clean_parch(self):
         parch = self.cleaned_data.get('parch')
         if parch is not None and (parch < 0 or parch > 10):
