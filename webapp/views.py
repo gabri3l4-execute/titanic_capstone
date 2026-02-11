@@ -27,4 +27,6 @@ class PredictionFormView(FormView):
         prediction.save()
         return super().form_valid(form)
     
+
+    
     
