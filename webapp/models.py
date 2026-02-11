@@ -43,11 +43,12 @@ class Passenger(models.Model):
         verbose_name="Gender"
     )
     
+    # FIXED: Changed from FloatField to IntegerField
     age = models.FloatField(
         null=True,
         blank=True,
         verbose_name="Age",
-        help_text="Age in years. Fractional if less than 1"
+        help_text="Age in years(integer). Null if unknown."
     )
     
     sibsp = models.IntegerField(
