@@ -134,6 +134,7 @@ class Passenger(models.Model):
         verbose_name="Data Source",
         help_text="Whether this record is from training or test dataset"
     )
+    
     imported_at = models.DateTimeField(default=timezone.now, verbose_name="Imported At")
     
     class Meta:
@@ -168,6 +169,7 @@ class Passenger(models.Model):
             self.age_group = 'senior'
         
         super().save(*args, **kwargs)
+        
 
 
 
@@ -196,7 +198,7 @@ class PredictionRecord(models.Model):
     age = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(120)],
         verbose_name="Age",
-        help_text="Age in years"
+        help_text="Age in years(integer)"
     )
     
     parch = models.IntegerField(
@@ -319,3 +321,5 @@ class PredictionRecord(models.Model):
             self.age_group = 'senior'
         
         super().save(*args, **kwargs)
+        
+        

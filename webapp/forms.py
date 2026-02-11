@@ -27,7 +27,10 @@ class PredictionForm(forms.ModelForm):
             'age': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Age in years',
-                'step': '0.1'
+                'step': '1',
+                'min':'0',
+                'max':'120'
+                
             }),
             'parch': forms.NumberInput(attrs={
                 'class': 'form-control',
@@ -73,8 +76,8 @@ class PredictionForm(forms.ModelForm):
         return age
     
     def clean_sibsp(self):
-        value = self.cleaned_data['sibsp']
-        return int(value)   # convert string to int
+        value = self.cleaned_data.get('sibsp')
+        return int(value) if value else 0   # convert string to int
 
     def clean_parch(self):
         parch = self.cleaned_data.get('parch')

@@ -37,7 +37,12 @@ class Command(BaseCommand):
                 )
                 passengers.append(passenger)
             
+            # check before bulk_create
+            if Passenger.objects.exists():
+                self.stdout.write(self.style.WARNING('Passenger table already contains data. Skipping import.'))
+                return
+            
             # Bulk insert for efficiency
-            Passenger.objects.bulk_create(passengers, ignore_conflicts=True)
+            Passenger.objects.bulk_create(passengers)
             
         self.stdout.write(self.style.SUCCESS(f'Successfully imported {len(passengers)} passengers.'))
