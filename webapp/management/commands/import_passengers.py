@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = 'Import cleaned Titanic passenger data from titanic_clean_train.csv'
 
     def handle(self, *args, **kwargs):
-        csv_path = os.path.join(settings.BASE_DIR, 'ml', 'titanic_data', 'titanic_clean_train.csv')     #'ml'-'titanic_data'-'titanic_cleaned_train.csv'
+        csv_path = os.path.join(settings.BASE_DIR, 'ml', 'titanic_clean_train.csv')     #'ml'-'titanic_cleaned_train.csv'
         
         if not os.path.exists(csv_path):
             self.stderr.write(self.style.ERROR(f'File not found: {csv_path}'))
