@@ -215,6 +215,14 @@ class PredictionRecord(models.Model):
         help_text="Probability of survival between 0.0 and 1.0",
     )
 
+    rating = models.IntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        verbose_name="User Rating",
+        help_text="User rating from 1 to 5 stars",
+    )
+
     # ============ SYSTEM METADATA ============
 
     created_at = models.DateTimeField(default=timezone.now, verbose_name="Prediction Timestamp")
