@@ -1,15 +1,11 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, FormView, ListView
+from django.shortcuts import render
+from django.views.generic import FormView
 from django.urls import reverse_lazy
-from .models import Passenger, PredictionRecord
 from .forms import PredictionForm
 
-import joblib
 import pandas as pd
 
 import pickle
-import pandas as pd
 from django.conf import settings
 from pathlib import Path
 
@@ -41,55 +37,29 @@ class PredictionFormView(FormView):
         # Save the form data to database
         prediction = form.save(commit=False)
 
-        # TODO: Integrate with ML model here
-        # For now, set mock prediction values
-        prediction.survived_prediction = prediction.sex == "female"  # Mock logic
-        prediction.probability = 0.72 if prediction.sex == "female" else 0.18
-
-        prediction.save()
-        return super().form_valid(form)
-
-
-def predict_view(request):
-    if request.method == "POST":
-        # Extract form data
+        # Convert form data into a DataFrame for the ML pipeline
         data = {
-            "Pclass": int(request.POST["pclass"]),
-            "Sex": request.POST["sex"],
-            "Age": float(request.POST["age"]),
-            "SibSp": int(request.POST["sibsp"]),
-            "Parch": int(request.POST["parch"]),
-            "Fare": float(request.POST["fare"]),
-            "Embarked": request.POST["embarked"],
+            "Pclass": prediction.pclass,
+            "Sex": prediction.sex,
+            "Age": prediction.age,
+            "SibSp": prediction.sibsp,
+            "Parch": prediction.parch,
+            "Fare": float(prediction.fare) if prediction.fare is not None else 0.0,
+            "Embarked": prediction.embarked,
         }
 
-        # Convert to DataFrame
         df = pd.DataFrame([data])
 
-        # Preprocess
+        # Preprocess using your saved pipeline
         X_processed = preprocessor.transform(df)
 
         # Predict
-        prediction = int(model.predict(X_processed)[0])
-        probability = float(model.predict_proba(X_processed)[0][1])
+        pred_value = int(model.predict(X_processed)[0])
+        pred_proba = float(model.predict_proba(X_processed)[0][1])
 
-        # Save to DB
-        record = PredictionRecord.objects.create(
-            pclass=data["Pclass"],
-            sex=data["Sex"],
-            age=data["Age"],
-            sibsp=data["SibSp"],
-            parch=data["Parch"],
-            fare=data["Fare"],
-            embarked=data["Embarked"],
-            prediction=prediction,
-            probability=probability,
-        )
+        # Save results into the Django model
+        prediction.survived_prediction = bool(pred_value)
+        prediction.probability = pred_proba
 
-        return render(request, "webapp/prediction_form.html", {
-            "prediction": prediction,
-            "probability": round(probability, 3),
-            "record_id": record.id,
-        })
-
-    return render(request, "webapp/prediction_form.html")
+        prediction.save()
+        return super().form_valid(form)
