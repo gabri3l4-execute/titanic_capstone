@@ -248,7 +248,7 @@ class PredictionRecord(models.Model):
         null=True,
         blank=True,
         verbose_name="Family Size",
-        help_text="Calculated as SibSp + Parch + 1"
+        help_text="Calculated as SibSp + Parch + 1",
         editable=False
     )
     
@@ -257,7 +257,7 @@ class PredictionRecord(models.Model):
         max_length=15,
         choices=Passenger.AGE_GROUP_CHOICES,
         blank=True,
-        verbose_name="Age Group"
+        verbose_name="Age Group",
         editable=False
     )
 
