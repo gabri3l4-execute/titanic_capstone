@@ -69,4 +69,5 @@ class PredictionListView(ListView):
     model = PredictionRecord
     template_name = "webapp/prediction_list.html"
     context_object_name = "predictions"
-    ordering = ["-created_at"]
+    ordering = ["-created_at"]  # newest first
+    paginate_by = 20  # optional

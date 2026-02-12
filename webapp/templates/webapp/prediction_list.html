@@ -1,7 +1,7 @@
-{% extends "base.html" %} {% block content %}
-<h2>Prediction History</h2>
+{% extends "webapp/base.html" %} {% block content %}
+<h2 class="mt-4 mb-3">Prediction History</h2>
 
-<table class="table table-striped">
+<table class="table table-striped table-hover">
   <thead>
     <tr>
       <th>Date</th>
@@ -32,10 +32,32 @@
     </tr>
     {% empty %}
     <tr>
-      <td colspan="7">No predictions yet.</td>
+      <td colspan="7" class="text-center">No predictions yet.</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 
-{% endblock %}
+{% if is_paginated %}
+<div class="d-flex justify-content-between">
+  {% if page_obj.has_previous %}
+  <a
+    href="?page={{ page_obj.previous_page_number }}"
+    class="btn btn-outline-secondary"
+    >Previous</a
+  >
+  {% else %}
+  <span></span>
+  {% endif %}
+
+  <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+  {% if page_obj.has_next %}
+  <a
+    href="?page={{ page_obj.next_page_number }}"
+    class="btn btn-outline-secondary"
+    >Next</a
+  >
+  {% endif %}
+</div>
+{% endif %} {% endblock %}
