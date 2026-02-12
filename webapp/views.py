@@ -70,4 +70,3 @@ class PredictionListView(ListView):
     template_name = "webapp/prediction_list.html"
     context_object_name = "predictions"
     ordering = ["-created_at"]  # newest first
-    paginate_by = 20  # optional
