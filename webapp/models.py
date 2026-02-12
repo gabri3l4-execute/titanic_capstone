@@ -251,24 +251,3 @@ class PredictionRecord(models.Model):
             self.age_group = "senior"
 
         super().save(*args, **kwargs)
-
-
-class PredictionRecord_v2(models.Model):
-    # User inputs
-    pclass = models.IntegerField()
-    sex = models.CharField(max_length=10)
-    age = models.FloatField(null=True, blank=True)
-    sibsp = models.IntegerField()
-    parch = models.IntegerField()
-    fare = models.FloatField(null=True, blank=True)
-    embarked = models.CharField(max_length=10)
-
-    # Model output
-    prediction = models.IntegerField()  # 0 or 1
-    probability = models.FloatField(null=True, blank=True)
-
-    # Metadata
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Prediction {self.id} - Survived={self.prediction}"
