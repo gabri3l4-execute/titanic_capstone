@@ -5,8 +5,13 @@ from django.urls import reverse_lazy
 from .models import Passenger, PredictionRecord
 from .forms import PredictionForm
 
+import joblib
+import pandas as pd
+
+
 def home(request):
     return render(request, 'webapp/home.html',{'title':'home'})
+
 class PredictionFormView(FormView):
     """
     View for the prediction form with SibSp dropdown
