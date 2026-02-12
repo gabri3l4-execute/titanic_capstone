@@ -1,13 +1,41 @@
-{% extends "webapp/base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <h2>Prediction History</h2>
 
-<ul>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Name</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>Family Size</th>
+      <th>Prediction</th>
+      <th>Probability</th>
+    </tr>
+  </thead>
+
+  <tbody>
     {% for record in predictions %}
-        <li>{{ record.created_at }} — {{ record.name }} — {{ record.survived_prediction }}</li>
+    <tr>
+      <td>{{ record.created_at|date:"Y-m-d H:i" }}</td>
+      <td>{{ record.name }}</td>
+      <td>{{ record.sex }}</td>
+      <td>{{ record.age }}</td>
+      <td>{{ record.family_size }}</td>
+
+      <td>
+        {% if record.survived_prediction %} Survived {% else %} Did Not Survive
+        {% endif %}
+      </td>
+
+      <td>{{ record.probability|floatformat:3 }}</td>
+    </tr>
     {% empty %}
-        <li>No predictions yet.</li>
+    <tr>
+      <td colspan="7">No predictions yet.</td>
+    </tr>
     {% endfor %}
-</ul>
+  </tbody>
+</table>
+
 {% endblock %}
