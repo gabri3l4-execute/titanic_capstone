@@ -1,0 +1,13 @@
+{% extends "webapp/base.html" %}
+
+{% block content %}
+<h2>Prediction History</h2>
+
+<ul>
+    {% for record in predictions %}
+        <li>{{ record.created_at }} — {{ record.name }} — {{ record.survived_prediction }}</li>
+    {% empty %}
+        <li>No predictions yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

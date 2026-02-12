@@ -1,13 +1,13 @@
-from django.shortcuts import render
-from django.views.generic import FormView
-from django.urls import reverse_lazy
-from .forms import PredictionForm
-
 import pandas as pd
-
 import pickle
+from django.shortcuts import render
+from django.views.generic import FormView, ListView
+from django.urls import reverse_lazy
 from django.conf import settings
+from .forms import PredictionForm
+from .models import PredictionRecord
 from pathlib import Path
+
 
 # This loads our ML artifacts once at server startup. Efficient and clean.
 MODEL_PATH = Path(settings.BASE_DIR) / "ML" / "model_training" / "artifacts" / "model.pkl"
@@ -63,3 +63,10 @@ class PredictionFormView(FormView):
 
         prediction.save()
         return super().form_valid(form)
+
+
+class PredictionListView(ListView):
+    model = PredictionRecord
+    template_name = "webapp/prediction_list.html"
+    context_object_name = "predictions"
+    ordering = ["-created_at"]
