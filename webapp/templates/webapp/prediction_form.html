@@ -135,5 +135,13 @@
     border-color: #1a237e;
     box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.25);
 }
+
 </style>
+
+{% if prediction %}
+    <p>Prediction: {{ prediction }}</p>
+    <p>Probability: {{ probability }}</p>
+    <p>Record saved with ID: {{ record_id }}</p>
+{% endif %}
+
 {% endblock %}
