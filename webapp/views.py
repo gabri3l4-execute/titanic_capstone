@@ -1,12 +1,13 @@
 import pandas as pd
 import pickle
-from django.shortcuts import render
-from django.views.generic import FormView, ListView
+from django.shortcuts import render,get_object_or_404, redirect
+from django.views.generic import FormView, ListView, DetailView
 from django.urls import reverse_lazy
 from django.conf import settings
 from .forms import PredictionForm
 from .models import PredictionRecord
 from pathlib import Path
+
 
 
 # This loads our ML artifacts once at server startup. Efficient and clean.
@@ -62,7 +63,25 @@ class PredictionFormView(FormView):
         prediction.probability = pred_proba
 
         prediction.save()
-        return super().form_valid(form)
+        return redirect('prediction_result', pk=prediction.pk)
+    
+
+def submit_rating(request, pk):
+        if request.method == 'POST':
+          prediction = get_object_or_404(PredictionRecord, pk=pk)
+          rating = request.POST.get('rating')
+          if rating:
+            prediction.rating = int(rating)
+            prediction.save()
+        return redirect('prediction_result', pk=pk)
+
+
+
+class PredictionResultView(DetailView):
+    model = PredictionRecord
+    template_name = 'webapp/result.html'
+    context_object_name = 'prediction'
+
 
 
 class PredictionListView(ListView):
