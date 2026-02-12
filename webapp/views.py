@@ -25,7 +25,25 @@ class PredictionFormView(FormView):
         prediction.probability = 0.72 if prediction.sex == 'female' else 0.18
         
         prediction.save()
-        return super().form_valid(form)
+        #return super().form_valid(form)
+        return render(self.request, 'webapp/results.html', {
+        'prediction': prediction
+})
+        
+    
+    def submit_rating(request, pk):
+        prediction = PredictionRecord.objects.get(pk=pk)
+
+        if request.method == "POST":
+         rating = request.POST.get("rating")
+         prediction.rating = rating
+         prediction.save()
+
+        return render(request, 'webapp/results.html', {
+          'prediction': prediction,
+          'message': "Thank you for your rating!"
+    })
+
     
 
     
