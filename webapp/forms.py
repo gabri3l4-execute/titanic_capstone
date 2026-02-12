@@ -3,7 +3,7 @@ from .models import PredictionRecord
 
 class PredictionForm(forms.ModelForm):
     """
-    Form for user predictions with SibSp dropdown as team decision
+    Passenger Survival Prediction Form for user prediction
     """
     
     # Custom field for SibSp with dropdown choices

@@ -175,7 +175,7 @@ class Passenger(models.Model):
 
 class PredictionRecord(models.Model):
     """
-    Model for storing user predictions from the web form
+    Model for storing user predictions from the web form, prediction results and probabilities
     Includes the same engineered features as Passenger model
     """
 
@@ -205,7 +205,7 @@ class PredictionRecord(models.Model):
         default=0,
         validators=[MinValueValidator(0), MaxValueValidator(10)],
         verbose_name="Parents/Children Aboard",
-        help_text="Number of parents or children traveling with"
+        help_text="Number of parents or children aboard"
     )
     
     embarked = models.CharField(
@@ -217,37 +217,29 @@ class PredictionRecord(models.Model):
         ],
         verbose_name="Port of Embarkation"
     )
-
-    # Optional fields (as per team decision)
-    sibsp = models.IntegerField(
-        default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(10)],
-        verbose_name="Siblings/Spouses Aboard",
-        help_text="Optional: Number of siblings or spouses traveling with"
-    )
-
-    ticket = models.CharField(
-        max_length=50,
-        blank=True,
-        verbose_name="Ticket Number",
-        help_text="Optional: Ticket number"
+    
+    #2.12 new add field
+    pclass = models.IntegerField(
+        choices=[(1, '1st'), (2, '2nd'), (3, '3rd')],
+        verbose_name="Passenger Class",
+        help_text="Ticket class: 1 = First, 2 = Second, 3 = Third"
     )
     
     fare = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        null=True,
-        blank=True,
-        verbose_name="Fare",
-        help_text="Optional: Ticket fare in pounds"
+        default=0.0,            # For migration security, forms will require input.
+        verbose_name="票价 (Fare)",
+        help_text="Ticket fare in pounds"
     )
-
-    cabin = models.CharField(
-        max_length=20,
-        blank=True,
-        verbose_name="Cabin Number",
-        help_text="Optional: Cabin number"
+    
+    sibsp = models.IntegerField(
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
+        verbose_name="Siblings/Spouses Aboard",
+        help_text="Number of siblings or spouses aboard"
     )
+    
 
     # ============ ENGINEERED FEATURES (Same as Passenger Model) ============
     
@@ -257,6 +249,7 @@ class PredictionRecord(models.Model):
         blank=True,
         verbose_name="Family Size",
         help_text="Calculated as SibSp + Parch + 1"
+        editable=False
     )
     
     # 2. AgeGroup Categories (same as Passenger model)
@@ -265,6 +258,7 @@ class PredictionRecord(models.Model):
         choices=Passenger.AGE_GROUP_CHOICES,
         blank=True,
         verbose_name="Age Group"
+        editable=False
     )
 
     # ============ PREDICTION RESULTS ============
