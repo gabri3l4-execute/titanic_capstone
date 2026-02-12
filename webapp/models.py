@@ -220,18 +220,19 @@ class PredictionRecord(models.Model):
     
     #2.12 new add field
     pclass = models.IntegerField(
-        choices=[(1, '1st'), (2, '2nd'), (3, '3rd')],
+        choices=[(1, 'First Class'), (2, 'Second Class'), (3, 'Third Class')],
         verbose_name="Passenger Class",
-        help_text="Ticket class: 1 = First, 2 = Second, 3 = Third"
-    )
+        help_text="Ticket class (1 = 1st, 2 = 2nd, 3 = 3rd)"
+    )    
     
     fare = models.DecimalField(
         max_digits=10,
-        decimal_places=2,
-        default=0.0,            # For migration security, forms will require input.
-        verbose_name="票价 (Fare)",
-        help_text="Ticket fare in pounds"
-    )
+        decimal_places=4,
+        null=True,
+        blank=True,
+        verbose_name="Fare",
+        help_text="Passenger fare in pounds"
+    )   
     
     sibsp = models.IntegerField(
         default=0,
@@ -240,7 +241,6 @@ class PredictionRecord(models.Model):
         help_text="Number of siblings or spouses aboard"
     )
     
-
     # ============ ENGINEERED FEATURES (Same as Passenger Model) ============
     
     # 1. FamilySize = SibSp + Parch + 1
