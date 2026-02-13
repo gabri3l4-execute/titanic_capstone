@@ -70,10 +70,12 @@
             <button type="submit" class="btn btn-primary">Submit Rating</button>
         </form>
 
-        {% if message %}
-            <div class="alert alert-success mt-3">
-                Thank you for your rating!
-            </div>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success">
+          {{ message }}
+        </div>
+        {% endfor %}
         {% endif %}
 
         <hr>
@@ -93,14 +95,30 @@
 
 <!-- Optional inline styles for stars -->
 <style>
+    .star-rating {
+        direction: rtl;
+        display: inline-flex;
+    }
+
     .star-rating input {
         display: none;
     }
+
     .star-rating label {
-        font-size: 25px;
+        font-size: 28px;
         color: gray;
         cursor: pointer;
+        padding: 0 2px;
+        transition: color 0.2s;
     }
+
+    /* hover effect */
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: gold;
+    }
+
+    /* selected stars */
     .star-rating input:checked ~ label {
         color: gold;
     }

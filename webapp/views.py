@@ -7,6 +7,8 @@ from django.conf import settings
 from .forms import PredictionForm
 from .models import PredictionRecord
 from pathlib import Path
+from django.contrib import messages
+
 #To train the model-  python -m ML.model_training.train
 
 # This loads our ML artifacts once at server startup. Efficient and clean.
@@ -107,6 +109,8 @@ def submit_rating(request, pk):
           if rating:
             prediction.rating = int(rating)
             prediction.save()
+            messages.success(request, "Thank you for rating! ⭐")
+
         return redirect('prediction_result', pk=pk)
 
 
