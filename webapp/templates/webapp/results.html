@@ -11,8 +11,8 @@
         <h4>Passenger Details</h4>
         <hr>
         <p><strong>Pclass:</strong> {{ prediction.pclass }}</p>
-        <p><strong>Name:</strong> {{ prediction.passenger_name }}</p>
-        <p><strong>Gender:</strong> {{ prediction.gender }}</p>
+        <p><strong>Name:</strong> {{ passenger_name }}</p>
+        <p><strong>Gender:</strong> {{ prediction.sex }}</p>
         <p><strong>Age:</strong> {{ prediction.age }}</p>
         <p><strong>Parents/Children:</strong> {{ prediction.parch }}</p>
         <p><strong>Siblings/Spouses:</strong> {{ prediction.sibsp }}</p>
@@ -78,7 +78,7 @@
 
         <!-- Navigation Buttons -->
         <div class="d-flex justify-content-between">
-            <a href="{% url 'predict' %}" class="btn btn-success">
+            <a href="{% url 'prediction_form' %}" class="btn btn-success">
                 ➕ Add Another Passenger
             </a>
             <a href="{% url 'home' %}" class="btn btn-secondary">
