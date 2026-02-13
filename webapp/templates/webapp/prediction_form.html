@@ -1,147 +1,172 @@
-{% extends "webapp/base.html" %}
+{% extends 'webapp/base.html' %}
+
+{% block title %}Passenger Survival Prediction - Titanic ML App{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <div class="col-md-8 col-lg-6">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">
-                        <i class="fas fa-user-plus me-2"></i>Predict Titanic Survival
-                    </h3>
+                    <h3 class="mb-0">🚢 Passenger Survival Prediction</h3>
+                    <small class="text-white-50">Enter passenger details to predict survival outcome</small>
                 </div>
                 <div class="card-body">
+                    
+                    {# ----- Display Django messages (success/error) ----- #}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    {# ----- Form validation errors (top summary) ----- #}
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>⚠️ Please correct the following errors:</strong>
+                            <ul class="mb-0 mt-2">
+                                {% for field in form %}
+                                    {% if field.errors %}
+                                        <li>{{ field.label }}: {{ field.errors|striptags }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    {# ----- Prediction Form ----- #}
                     <form method="post" novalidate>
                         {% csrf_token %}
-                        
-                        <h5 class="mb-3 border-bottom pb-2">Required Information</h5>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Passenger Name</label>
-                                {{ form.name }}
-                                {% if form.name.errors %}
-                                <div class="text-danger">{{ form.name.errors }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Gender</label>
-                                {{ form.sex }}
-                                {% if form.sex.errors %}
-                                <div class="text-danger">{{ form.sex.errors }}</div>
-                                {% endif %}
-                            </div>
+
+                        {# Name #}
+                        <div class="mb-3">
+                            <label for="{{ form.name.id_for_label }}" class="form-label fw-bold">
+                                {{ form.name.label }} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.name.errors|striptags }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">{{ form.name.help_text }}</div>
                         </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Age</label>
-                                {{ form.age }}
-                                <small class="form-text text-muted">{{ form.age.help_text }}</small>
-                                {% if form.age.errors %}     
-                                <div class="text-danger">{{ form.age.errors }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Parents/Children Aboard</label>
-                                {{ form.parch }}
-                                <small class="form-text text-muted">{{ form.parch.help_text }}</small>
-                                {% if form.parch.errors %}
-                                <div class="text-danger">{{ form.parch.errors }}</div>
-                                {% endif %}
-                            </div>
+
+                        {# Sex #}
+                        <div class="mb-3">
+                            <label for="{{ form.sex.id_for_label }}" class="form-label fw-bold">
+                                {{ form.sex.label }} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.sex }}
+                            {% if form.sex.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.sex.errors|striptags }}
+                                </div>
+                            {% endif %}
                         </div>
-                        
-                        <div class="row mb-4">
-                            <div class="col-md-12">
-                                <label class="form-label">Port of Embarkation</label>
-                                {{ form.embarked }}
-                                {% if form.embarked.errors %}
-                                <div class="text-danger">{{ form.embarked.errors }}</div>
-                                {% endif %}
-                            </div>
+
+                        {# Age #}
+                        <div class="mb-3">
+                            <label for="{{ form.age.id_for_label }}" class="form-label fw-bold">
+                                {{ form.age.label }} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.age }}
+                            {% if form.age.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.age.errors|striptags }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">{{ form.age.help_text }}</div>
                         </div>
-                        
-                        <h5 class="mb-3 border-bottom pb-2">Optional Information</h5>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Siblings/Spouses Aboard (Optional)</label>
-                                {{ form.sibsp }}
-                                <small class="form-text text-muted">{{ form.sibsp.help_text }}</small>
-                                {% if form.sibsp.errors %}   
-                                <div class="text-danger">{{ form.sibsp.errors }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Ticket Number (Optional)</label>
-                                {{ form.ticket }}
-                                {% if form.ticket.errors %}
-                                <div class="text-danger">{{ form.ticket.errors }}</div>
-                                {% endif %} 
-                            </div>
+
+                        {# Pclass #}
+                        <div class="mb-3">
+                            <label for="{{ form.pclass.id_for_label }}" class="form-label fw-bold">
+                                {{ form.pclass.label }} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.pclass }}
+                            {% if form.pclass.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.pclass.errors|striptags }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">{{ form.pclass.help_text }}</div>
                         </div>
-                        
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label">Fare (Optional)</label>
-                                {{ form.fare }}
-                                {% if form.fare.errors %}
-                                <div class="text-danger">{{ form.fare.errors }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Cabin (Optional)</label>
-                                {{ form.cabin }}
-                                {% if form.cabin.errors %}    
-                                <div class="text-danger">{{ form.cabin.errors }}</div>
-                                {% endif %}
-                            </div>
+
+                        {# SibSp #}
+                        <div class="mb-3">
+                            <label for="{{ form.sibsp.id_for_label }}" class="form-label fw-bold">
+                                {{ form.sibsp.label }} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.sibsp }}
+                            {% if form.sibsp.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.sibsp.errors|striptags }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">{{ form.sibsp.help_text }}</div>
                         </div>
-                        
-                        <div class="alert alert-info">
-                            <h6><i class="fas fa-info-circle me-2"></i>Engineered Features</h6>
-                            <p class="mb-0">
-                                <strong>Family Size:</strong> Will be calculated as (SibSp + Parch + 1)<br>
-                                <strong>Age Group:</strong> Will be automatically categorized based on age
-                            </p>
+
+                        {# Parch #}
+                        <div class="mb-3">
+                            <label for="{{ form.parch.id_for_label }}" class="form-label fw-bold">
+                                {{ form.parch.label }} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.parch }}
+                            {% if form.parch.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.parch.errors|striptags }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">{{ form.parch.help_text }}</div>
                         </div>
-                        
-                        <div class="d-grid">
+
+                        {# Fare #}
+                        <div class="mb-3">
+                            <label for="{{ form.fare.id_for_label }}" class="form-label fw-bold">
+                                {{ form.fare.label }} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.fare }}
+                            {% if form.fare.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.fare.errors|striptags }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">{{ form.fare.help_text }}</div>
+                        </div>
+
+                        {# Embarked #}
+                        <div class="mb-3">
+                            <label for="{{ form.embarked.id_for_label }}" class="form-label fw-bold">
+                                {{ form.embarked.label }} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.embarked }}
+                            {% if form.embarked.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.embarked.errors|striptags }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">{{ form.embarked.help_text }}</div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
                             <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-calculator me-2"></i>Predict Survival
+                                🔮 Predict Survival
                             </button>
                         </div>
                     </form>
                 </div>
-            </div>
-            
-            <div class="mt-4 text-center">
-                <a href="{% url 'home' %}" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left me-2"></i>Back to Home
-                </a>
+                <div class="card-footer text-muted text-center">
+                    <small>Model: Logistic Regression | Dataset: Titanic (Kaggle)</small>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-.form-control, .form-select {
-    border-radius: 8px;
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-}
-.form-control:focus, .form-select:focus {
-    border-color: #1a237e;
-    box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.25);
-}
-
-</style>
-
-{% if prediction %}
-    <p>Prediction: {{ prediction }}</p>
-    <p>Probability: {{ probability }}</p>
-    <p>Record saved with ID: {{ record_id }}</p>
-{% endif %}
-
 {% endblock %}
