@@ -20,7 +20,7 @@ class PredictionForm(forms.ModelForm):
     pclass = forms.ChoiceField(
         choices=PCLASS_CHOICES,
         initial=3,
-        label="船舱等级 (Passenger Class)",
+        label="Passenger Class",
         help_text="1 = First, 2 = Second, 3 = Third",
         widget=forms.Select(attrs={'class': 'form-select'})
     )    
